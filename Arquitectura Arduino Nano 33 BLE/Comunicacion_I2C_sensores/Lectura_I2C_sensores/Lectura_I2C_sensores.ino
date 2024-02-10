@@ -70,7 +70,7 @@ void receiveEvent(int howMany){
   }
   // Muestra por pantalla los datos obtenidos por cada segundo y enciende LED
   digitalWrite(LED_BUILTIN, HIGH);
-  delay(5);
+  delay(20);
   digitalWrite(LED_BUILTIN, LOW); 
   Serial.println(data);
 }
