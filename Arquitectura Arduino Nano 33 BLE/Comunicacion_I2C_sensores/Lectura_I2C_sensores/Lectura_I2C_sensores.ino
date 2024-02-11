@@ -68,9 +68,9 @@ void receiveEvent(int howMany){
     // El caracter leido via comunicacion I2C se añade al string "data"
     data += lectura;
   }
-  // Muestra por pantalla los datos obtenidos por cada segundo y enciende LED
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(20);
-  digitalWrite(LED_BUILTIN, LOW); 
+  // Muestra por pantalla los datos obtenidos por cada segundo y enciende LED 
   Serial.println(data);
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(1000);
+  digitalWrite(LED_BUILTIN, LOW);
 }

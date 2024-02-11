@@ -24,6 +24,7 @@ float medidas[5][3][3]; // Matriz con los 5 valores medidos en cada sensor de x,
 bool send = false;
 char buffer[15];
 char envio[8];
+String valor = "";
 
 // Funcion de devolucion de llamada del timer
 void t3Callback()
@@ -80,11 +81,18 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  // Si hay valor disponible en el puerto serie se procede a leerlo
+  if (Serial.available() > 0){
+    // Lectura de una palabra en el puerto serie
+    valor = Serial.readStringUntil('\n'); // Lectura hasta que finaliza la linea
+    cont = 0; // Reinicio el contador
+  }
   // Inicio de la transmision del dato por I2C en la direccion 8
   Wire.beginTransmission(8);
   // Comprobacion que el contador sea mayor o igual a 0 y menor que 5 y que haya llamada al timer
   // Se debe medir cada 200 ms y mostrar una vez pasado 1 segundo (5 veces 200 ms)
-  if (cont>=0 and cont<5 and send == true){
+  // Compruebo que el comando enviado es "send"
+  if (cont>=0 and cont<5 and send == true and valor == "send"){
     // Comprobacion que el acelerometro, giroscopo y magnetometro estan disponibles
     if(IMU.accelerationAvailable() and IMU.gyroscopeAvailable() and IMU.magneticFieldAvailable()){
       // Lectura del acelerometro en x, y, z
@@ -128,6 +136,7 @@ void loop() {
           }
         }
       }
+      valor = "";
       // Finalizacion de la transmision
       Wire.endTransmission();
     }
