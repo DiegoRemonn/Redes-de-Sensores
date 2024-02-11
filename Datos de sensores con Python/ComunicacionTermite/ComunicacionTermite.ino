@@ -1,6 +1,6 @@
 // Envio de datos por puerto serie para lectura en Termite o Python
 // Created by Diego Remon
-// https://github.com/DiegoRemonn/Arquitectura-Arduino-Nano-33-BLE
+// https://github.com/DiegoRemonn/Redes-de-Sensores
 
 #include <Arduino.h>
 #include "BBTimer.hpp"
@@ -42,15 +42,7 @@ void setup() {
     while(1);
   }
 
-  // Muestra por puerto serie el ratio de muestras del acelerometro en Hz y otros mensajes utiles
-  //Serial.print("Ratio de muestras del acelerometro = ");
-  //Serial.print(IMU.accelerationSampleRate());
-  //Serial.println(" Hz");
-  //Serial.println();
-  //Serial.println("Aceleracion en g's");
-  //Serial.println("X\tY\tZ");
-
-  // Inicializacion y arranque del timer con una periodicidad de 0.2 segundos
+  // Inicializacion y arranque del timer con una periodicidad de 50 milisegundos
   my_t3.setupTimer(50000, t3Callback);
   my_t3.timerStart();
 }
@@ -67,9 +59,9 @@ void loop() {
       IMU.readAcceleration(x_acc, y_acc, z_acc);
     }
     // Almacenamiento de las lecturas en una matriz, primer valor x, segundo y, tercero z
-    medidas[0] = x_acc; // Cinco valores de x del acelerometro
-    medidas[1] = y_acc; // Cinco valores de y del acelerometro
-    medidas[2] = z_acc; // Cinco valores de z del acelerometro
+    medidas[0] = x_acc; // Valores de x del acelerometro
+    medidas[1] = y_acc; // Valores de y del acelerometro
+    medidas[2] = z_acc; // Valores de z del acelerometro
 
     //Serial.print("x, y, z: ");
     // Recorrido de la matriz
