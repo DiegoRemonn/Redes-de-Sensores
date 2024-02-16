@@ -15,6 +15,7 @@
  */
 
  // Created by Diego Remon
+ // https://github.com/DiegoRemonn/Redes-de-Sensores
 
 // If your target is limited in memory remove this macro to save 10K RAM
 #define EIDSP_QUANTIZE_FILTERBANK   0

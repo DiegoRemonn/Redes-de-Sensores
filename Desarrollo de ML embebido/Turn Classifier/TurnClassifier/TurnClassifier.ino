@@ -15,6 +15,7 @@
  */
 
  // Created by Diego Remon
+ // https://github.com/DiegoRemonn/Redes-de-Sensores
 
 /* Includes ---------------------------------------------------------------- */
 #include <DiegoRemon_AccelerometerArduino_inferencing.h>
