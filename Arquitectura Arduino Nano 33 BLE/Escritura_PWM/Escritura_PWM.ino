@@ -1,6 +1,6 @@
 // Lectura del ADC con los timers
 // Created by Diego Remon
-// https://github.com/DiegoRemonn/Arquitectura-Arduino-Nano-33-BLE
+// https://github.com/DiegoRemonn/Redes-de-Sensores
 
 #include <Arduino.h>
 #include "BBTimer.hpp"

@@ -1,7 +1,7 @@
 // Lectura del ADC con/sin los timers y escritura de PWM
 // Asignacion de tarea por UART mediante Strings
 // Created by Diego Remon
-// https://github.com/DiegoRemonn/Arquitectura-Arduino-Nano-33-BLE
+// https://github.com/DiegoRemonn/Redes-de-Sensores
 
 #include <Arduino.h>
 #include "BBTimer.hpp"

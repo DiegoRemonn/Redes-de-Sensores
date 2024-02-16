@@ -1,6 +1,6 @@
 // Escritura I2C con Arduino Nano 33 BLE
 // Created by Diego Remon
-// https://github.com/DiegoRemonn/Arquitectura-Arduino-Nano-33-BLE
+// https://github.com/DiegoRemonn/Redes-de-Sensores
 
 #include <Wire.h>
 

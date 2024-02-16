@@ -1,6 +1,6 @@
 // Lectura y uso del magnetometro del Arduino Nano 33 BLE
 // Created by Diego Remon
-// https://github.com/DiegoRemonn/Arquitectura-Arduino-Nano-33-BLE
+// https://github.com/DiegoRemonn/Redes-de-Sensores
 
 #include <Arduino.h>
 #include "BBTimer.hpp"
