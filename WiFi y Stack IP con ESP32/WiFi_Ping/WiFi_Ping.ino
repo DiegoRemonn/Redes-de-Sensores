@@ -6,8 +6,8 @@
 #include <ESPping.h>
 
 // Declaración de las características de la red WiFi
-const char* ssid = "Redmi_Note_8_Pro";
-const char* password = "pkdq7163";
+const char* ssid = ""; // Put your own WiFi ssid
+const char* password = ""; // Put your own WiFi password
 
 void setup() {
   // put your setup code here, to run once:

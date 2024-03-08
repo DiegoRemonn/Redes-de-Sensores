@@ -13,8 +13,8 @@ WiFiClient client;
 // Setup the MQTT client class by passing in the WiFi client and MQTT server and login details.
 Adafruit_MQTT_Client mqtt(&client, IO_SERVER, IO_SERVERPORT, IO_USERNAME, IO_KEY);
 
-// Setup a feed called 'test' for publishing.
-AdafruitIO_Feed *feed = io.feed("RedesSensoresDiego");
+// Setup a feed for publishing.
+AdafruitIO_Feed *feed = io.feed("");
 
 void setup()
 {

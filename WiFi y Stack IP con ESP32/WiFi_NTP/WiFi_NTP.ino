@@ -7,8 +7,8 @@
 #include "ESP32TimerInterrupt.h"
 
 // Declaración de las características de la red WiFi
-const char* ssid = "Redmi_Note_8_Pro";
-const char* password = "pkdq7163";
+const char* ssid = ""; // Put your own WiFi ssid
+const char* password = ""; // Put your own WiFi password
 
 // Declaración de las características del servidor NTP
 const char* ntpServer = "pool.ntp.org";

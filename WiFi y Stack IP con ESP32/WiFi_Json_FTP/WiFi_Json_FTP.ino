@@ -7,12 +7,12 @@
 #include "ESP32_FTPClient.h"
 
 // Declaración de las características de la red WiFi y servidor FTP
-const char* ssid = "Redmi_Note_8_Pro";
-const char* password = "pkdq7163";
-char ftp_server[] = "155.210.150.77";
-char ftp_user[] = "rsense";
-char ftp_pass[] = "rsense";
-char ftp_directory[] = "/rsense/797528";
+const char* ssid = ""; // Put your own WiFi ssid
+const char* password = ""; // Put your own WiFi password
+char ftp_server[] = ""; // Put your FTP server IP
+char ftp_user[] = ""; // Put your FTP server user
+char ftp_pass[] = ""; // Put your FTP server password
+char ftp_directory[] = ""; // Put your desired output directory
 
 // Inicialización de un cliente FTP
 ESP32_FTPClient ftp (ftp_server,ftp_user,ftp_pass, 5000, 2);
@@ -86,7 +86,7 @@ void uploadJSON(String json) {
     Serial.println(fileName);
     ftp.InitFile("Type A"); // Transferencia de archivo ASCII
     //if (!ftp_directory) {
-      //ftp.MakeDir("/rsense/797528");
+      //ftp.MakeDir(""); // Create the desired directory in case it doesn't exist
     //}
     ftp.ChangeWorkDir(ftp_directory); // Cambio al directorio deseado
     ftp.NewFile(fileName); // le doy nuevo nombre al archivo

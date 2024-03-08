@@ -5,8 +5,8 @@
 // Declaración de las características del servidor MQTT
 #define IO_SERVER "io.adafruit.com"
 #define IO_SERVERPORT 1883
-#define IO_USERNAME  "DiegoRemon"
-#define IO_KEY       "aio_vDEh41ZI7ayJfR203ztgo997B8Hp"
+#define IO_USERNAME  "" // Put your Adafruit IO username
+#define IO_KEY       "" // Put your Adafruit IO AIOKEY
 /******************************* WIFI **************************************/
 
 // the AdafruitIO_WiFi client will work with the following boards:
@@ -23,8 +23,8 @@
 //   - Adafruit AirLift FeatherWing -> https://www.adafruit.com/product/4264
 
 // Declaración de las características de la red WiFi
-const char* WIFI_SSID = "Redmi_Note_8_Pro";
-const char* WIFI_PASS = "pkdq7163";
+const char* ssid = ""; // Put your own WiFi ssid
+const char* password = ""; // Put your own WiFi password
 
 // uncomment the following line if you are using airlift
 // #define USE_AIRLIFT
