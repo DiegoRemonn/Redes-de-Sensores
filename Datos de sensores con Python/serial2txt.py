@@ -18,7 +18,7 @@ def main(args):
             f.write('Archivo generado adecuadamente\n')
         
         # Apertura y escritura de una línea de inicio de datos del sensor en .txt
-        with open('datos.txt', 'w') as f:
+        with open('datos.csv', 'w') as f:
             f.write("x;y;z\n")
         
         i = 0
@@ -30,7 +30,7 @@ def main(args):
                 line = puerto.readline().decode('utf-8').rstrip()
                 print(line)
                 # Escritura de una línea de datos leidos en archivo .txt y separo con ';'
-                with open('datos.txt', 'a') as f:
+                with open('datos.csv', 'a') as f:
                     f.write(line.replace(', ', ';') + '\n')
                 i += 1
         print("Escritura finalizada con exito.")
