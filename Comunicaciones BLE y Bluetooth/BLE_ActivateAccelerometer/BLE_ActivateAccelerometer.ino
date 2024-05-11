@@ -36,7 +36,7 @@ BLEService accelerometerService(accelerometerServiceUuid); // BLE Accelerometer 
 BLEStringCharacteristic ble_accelerometerX(accelerometerXCharacteristicUuid, BLERead | BLENotify, 12);
 BLEStringCharacteristic ble_accelerometerY(accelerometerYCharacteristicUuid, BLERead | BLENotify, 12);
 BLEStringCharacteristic ble_accelerometerZ(accelerometerZCharacteristicUuid, BLERead | BLENotify, 12);
-BLEStringCharacteristic ble_accelerometer(accelerometerZCharacteristicUuid, BLERead | BLENotify, 20);
+BLEStringCharacteristic ble_accelerometer(accelerometerCharacteristicUuid, BLERead | BLENotify, 20);
 BLEBoolCharacteristic ble_accelerometerSwitch("19B10001-E8F2-537E-4F6C-D104768A1214", BLERead | BLEWrite);
 
 //Function prototype

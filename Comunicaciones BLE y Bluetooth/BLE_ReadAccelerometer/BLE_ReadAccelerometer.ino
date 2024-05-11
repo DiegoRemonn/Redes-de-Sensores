@@ -35,7 +35,7 @@ BLEService accelerometerService(accelerometerServiceUuid); // BLE Accelerometer 
 BLEStringCharacteristic ble_accelerometerX(accelerometerXCharacteristicUuid, BLERead | BLENotify, 12);
 BLEStringCharacteristic ble_accelerometerY(accelerometerYCharacteristicUuid, BLERead | BLENotify, 12);
 BLEStringCharacteristic ble_accelerometerZ(accelerometerZCharacteristicUuid, BLERead | BLENotify, 12);
-BLEStringCharacteristic ble_accelerometer(accelerometerZCharacteristicUuid, BLERead | BLENotify, 20);
+BLEStringCharacteristic ble_accelerometer(accelerometerCharacteristicUuid, BLERead | BLENotify, 20);
 
 //Function prototype
 void readValues();
