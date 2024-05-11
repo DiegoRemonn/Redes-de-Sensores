@@ -1,30 +1,20 @@
-//Includes
+// Tiptoe detection, measuring mean, max, min angles, up and cycle times
+// Send data with BLE comunication and starting the process with a BLE characteristic
+// Created by Ignacio Latre and Diego Remon
+// https://github.com/DiegoRemonn/Redes-de-Sensores
+// https://github.com/Starkx12/Redes_de_sensores
+
+// Includes
 #include <arduino.h>
 #include "BBTimer.hpp"
-#include "mbed.h"
 #include <Arduino_LSM9DS1.h>
 #include <ArduinoBLE.h>
 
-//Defines
-#define alpha (0.7F) 
-#define UUID_MEAN_ANGLE   "1"
-#define UUID_MAX_ANGLE    "2"
-#define UUID_MIN_ANGLE    "3"
-#define UUID_TIME_UP      "4"
-#define UUID_TIME_CYCLE   "5"
-#define UUID_START        "6"
-#define BLE_UUID_TEST_SERVICE   "9A48ECBA-2E92-082F-C079-9E75AAE428B1"
+// Designation of a BBTimer's class timer
+BBTimer my_t3(BB_TIMER3);
 
-//BLE
-BLEService testService( BLE_UUID_TEST_SERVICE );
-BLEStringCharacteristic Characteristic_MEAN( UUID_MEAN_ANGLE, BLERead | BLENotify,12 );
-BLEStringCharacteristic Characteristic_MAX( UUID_MAX_ANGLE, BLERead | BLENotify,12 );
-BLEStringCharacteristic Characteristic_MIN( UUID_MIN_ANGLE, BLERead | BLENotify,12 );
-BLEStringCharacteristic Characteristic_UP( UUID_TIME_UP, BLERead | BLENotify,12 );
-BLEStringCharacteristic Characteristic_CYCLE( UUID_TIME_CYCLE, BLERead | BLENotify,12 );
-BLEByteCharacteristic switchCharacteristic(BLE_UUID_TEST_SERVICE, BLERead | BLEWrite);
-
-//Global variables
+// Variables and constants initialization
+// Global variables
 bool send_flag = false;
 float acc_z_filtered = 0.0;
 float gyr_y_filtered = 0.0;
@@ -45,53 +35,88 @@ float time_top = 0.0;
 float time_down = 0.0;
 float mean_aux = 0.0;
 bool start = false;
+bool startSwitch = false;
+float alpha = 0.7;
 
-// Definición de los estados
+// States definition
 enum State {REST, UP, TOP, DOWN};
-State actual_State = REST; 
+State actual_State = REST;
 
-//Interruptions
-BBTimer my_t1(BB_TIMER1);
+// Personalized UUID for the BLE services and characteristics
+const char* deviceServiceUuid = "F000AA10-0451-4000-B000-000000000000";
+const char* meanAngleCharacteristicUuid = "F000AA11-0451-4000-B000-000000000000";
+const char* maxAngleCharacteristicUuid = "F000AA12-0451-4000-B000-000000000000";
+const char* minAngleCharacteristicUuid = "F000AA13-0451-4000-B000-000000000000";
+const char* timeUpCharacteristicUuid = "F000AA14-0451-4000-B000-000000000000";
+const char* timeCycleCharacteristicUuid = "F000AA15-0451-4000-B000-000000000000";
+const char* startCharacteristicUuid = "F000AA16-0451-4000-B000-000000000000";
 
-void t1Callback()
+BLEService deviceService(deviceServiceUuid); // BLE Accelerometer Service
+
+// BLE Accelerometer Characteristic - custom 128-bit UUID, read and notify by central
+// Syntax: BLE<DATATYPE>Characteristic <NAME>(<UUID>,<PROPERTIES>,<DATA LENGTH>)
+BLEStringCharacteristic ble_meanAngle(meanAngleCharacteristicUuid, BLERead | BLENotify, 12);
+BLEStringCharacteristic ble_maxAngle(maxAngleCharacteristicUuid, BLERead | BLENotify, 12);
+BLEStringCharacteristic ble_minAngle(minAngleCharacteristicUuid, BLERead | BLENotify, 12);
+BLEStringCharacteristic ble_upTime(timeUpCharacteristicUuid, BLERead | BLENotify, 12);
+BLEStringCharacteristic ble_cycleTime(timeCycleCharacteristicUuid, BLERead | BLENotify, 12);
+BLEBoolCharacteristic ble_startSwitch("startCharacteristicUuid", BLERead | BLEWrite);
+
+// BLE callback function for the timer
+void t3Callback()
 {
   send_flag = true; 
 }
 
 void setup() {
-
   Serial.begin(9600);
+  while (!Serial);
 
-  if (!IMU.begin()) {
-      Serial.println("Failed to initialize IMU!");
-      while (1);
-    }
-
-  // begin initialization
-  if (!BLE.begin()) {
-        while (1);
+  // IMU sensor initialization (Inertial Measurement Unit)
+  // Correct start verification
+  if(!IMU.begin()){
+    Serial.println("Error al inicializar el IMU!");
+    while(1);
   }
 
-  // set advertised local name and service UUID:
-  BLE.setLocalName("Diego");
-  BLE.setAdvertisedService(testService);
+  // Set LED's pin to output mode
+  pinMode(LED_BUILTIN, OUTPUT);
+  
+  digitalWrite(LED_BUILTIN, LOW);    // when the central disconnects, turn off the LED
 
-  // add the characteristic to the service
-  testService.addCharacteristic( Characteristic_MEAN);
-  testService.addCharacteristic( Characteristic_MAX);
-  testService.addCharacteristic( Characteristic_MIN);
-  testService.addCharacteristic( Characteristic_UP);
-  testService.addCharacteristic( Characteristic_CYCLE);
-  testService.addCharacteristic(switchCharacteristic);
+  // Begin BLE initialization
+  if (!BLE.begin()) {
+    Serial.println("Starting Bluetooth® Low Energy failed!");
+    while (1);
+  }
 
-  // add service
-  BLE.addService(testService);
+  // Set advertised local name and service UUID:
+  BLE.setLocalName("Diego"); // set your own local name
+  BLE.setAdvertisedService(deviceService);
 
-  // start advertising
+  // Add the characteristic to the service
+  deviceService.addCharacteristic(ble_meanAngle);
+  deviceService.addCharacteristic(ble_maxAngle);
+  deviceService.addCharacteristic(ble_minAngle);
+  deviceService.addCharacteristic(ble_upTime);
+  deviceService.addCharacteristic(ble_cycleTime);
+  deviceService.addCharacteristic(ble_startSwitch);
+
+  // Switch initialization in stop position
+  ble_startSwitch.writeValue(startSwitch); 
+
+  // Add service
+  BLE.addService(deviceService);
+
+  // Start advertising
   BLE.advertise();
 
-  my_t1.setupTimer(20000, t1Callback);
-  my_t1.timerStart(); 
+  Serial.println("BLE LED Peripheral");
+  Serial.println("Bluetooth device is now active, waiting for connections...");
+
+  // Initialization and start of the interrupt timer with a 20 ms period (50 Hz)
+  my_t3.setupTimer(20000, t3Callback);
+  my_t3.timerStart();
 
 }
 
@@ -106,14 +131,20 @@ void loop() {
   float z_acc = 0.0;  
   float angle_y = 0.0;
   
-  // listen for Bluetooth® Low Energy peripherals to connect:
+  // Listen for Bluetooth® Low Energy peripherals to connect:
   BLEDevice central = BLE.central();
+
+  // If a central is connected to peripheral:
   if (central) {
+    Serial.print("Connected to central: ");
+    // Print the central's MAC address:
+    Serial.println(central.address());
+    digitalWrite(LED_BUILTIN, HIGH); // turn on the LED to indicate the connection
 
+    // While the central is still connected to peripheral:
     while (central.connected()) { 
-
-      if(switchCharacteristic.written()) {
-        start =  (switchCharacteristic.value()>0) ? true : false;  
+      if(ble_startSwitch.written()) {
+        start =  (ble_startSwitch.value()>0) ? true : false;  
         if(start){
         Serial.println("ON");
         }else{
@@ -283,11 +314,11 @@ void loop() {
             counter_50Hz =0;  
             mean_aux=0;            
             
-            Characteristic_MEAN.writeValue( String(mean_angle));
-            Characteristic_MAX.writeValue( String(max_angle));
-            Characteristic_MIN.writeValue( String(min_angle));
-            Characteristic_UP.writeValue( String(top_time));
-            Characteristic_CYCLE.writeValue( String(cycle_time));
+            ble_meanAngle.writeValue(String(mean_angle));
+            ble_maxAngle.writeValue(String(max_angle));
+            ble_minAngle.writeValue(String(min_angle));
+            ble_upTime.writeValue(String(top_time));
+            ble_cycleTime.writeValue(String(cycle_time));
             Serial.println(String(mean_angle));
             Serial.println(String(max_angle));
             Serial.println(String(min_angle));
@@ -298,5 +329,10 @@ void loop() {
         }    
       }
     }
+    
+    // when the central disconnects, print it out:
+    Serial.print(F("Disconnected from central: "));
+    Serial.println(central.address());
+    digitalWrite(LED_BUILTIN, LOW);    // when the central disconnects, turn off the LED
   }
 }
