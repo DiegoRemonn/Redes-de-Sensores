@@ -146,7 +146,7 @@ void loop() {
       if (ble_startSwitch.written()) {
         start = ble_startSwitch.value();  
         if (start) {
-        Serial.println("ON");
+          Serial.println("ON");
         }else{
           Serial.println("OFF");
         }      
