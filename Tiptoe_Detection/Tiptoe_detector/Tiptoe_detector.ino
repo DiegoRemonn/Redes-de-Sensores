@@ -143,16 +143,16 @@ void loop() {
 
     // While the central is still connected to peripheral:
     while (central.connected()) { 
-      if(ble_startSwitch.written()) {
-        start =  (ble_startSwitch.value()>0) ? true : false;  
-        if(start){
+      if (ble_startSwitch.written()) {
+        start = ble_startSwitch.value();  
+        if (start) {
         Serial.println("ON");
         }else{
           Serial.println("OFF");
         }      
       }
 
-      if(start==false){
+      if (start==false) {
         
         send_flag = false;
         acc_z_filtered = 0.0;
@@ -174,7 +174,7 @@ void loop() {
         time_down = 0.0;
         mean_aux = 0.0;
         start = false;
-        actual_State = REST; 
+        actual_State = REST;
 
       }
       
@@ -217,7 +217,8 @@ void loop() {
             dist_min=5;
             counter_state=0;
             actual_State = UP ;
-            time_up = millis();   
+            time_up = millis();
+            Serial.println("UP");
 
           }
 
@@ -231,7 +232,8 @@ void loop() {
             counter_state=0;
             actual_State = TOP ;
             time_top = millis();
-            cycle_time = abs(time_top - time_up);      
+            cycle_time = abs(time_top - time_up);    
+            Serial.println("TOP");  
             
           }
 
@@ -246,6 +248,7 @@ void loop() {
             actual_State = DOWN;
             time_down = millis();
             top_time = abs(time_down-time_top);
+            Serial.println("DOWN");
             
           }
         //From down to rest
@@ -256,7 +259,8 @@ void loop() {
 
             dist_min=5;
             counter_state=0;
-            actual_State = REST ;    
+            actual_State = REST;
+            Serial.println("REST");
             
           }  
             
