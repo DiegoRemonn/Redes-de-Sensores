@@ -18,6 +18,7 @@ BBTimer my_t3(BB_TIMER3);
 bool send_flag = false;
 float acc_z_filtered = 0.0;
 float acc_z_filtered_amplif = 0.0;
+float acc_max = 0.0;
 float gyr_y_filtered = 0.0;
 int counter_50Hz = 0;
 float abs_angle_y = 0.0;
@@ -158,6 +159,7 @@ void loop() {
         send_flag = false;
         acc_z_filtered = 0.0;
         acc_z_filtered_amplif = 0.0;
+        acc_max = 0.0;
         gyr_y_filtered = 0.0;
         counter_50Hz = 0;
         abs_angle_y = 0.0;
@@ -213,7 +215,7 @@ void loop() {
         dist_min -= 1;    
         
         //From rest to up
-        if ((acc_z_filtered_amplif < -2) and (abs(y_dps) < 10) and (gyr_y_filtered > 7) and (dist_min<=0) and (actual_State == REST)){
+        if ((acc_z_filtered_amplif < -2) and (abs(y_dps) < 50) and (gyr_y_filtered > 7) and (dist_min<=0) and (actual_State == REST)){
 
           counter_state+=1;
           if(counter_state>=5){
@@ -236,7 +238,8 @@ void loop() {
             actual_State = TOP ;
             time_top = millis();
             cycle_time = abs(time_top - time_up);    
-            Serial.println("TOP");  
+            Serial.println("TOP");
+            acc_max = acc_z_filtered_amplif;
           }
 
         //From top to up
@@ -254,7 +257,7 @@ void loop() {
           }
 
         //From top to down
-        }else if ((gyr_y_filtered < -7) and (dist_min<=0) and (actual_State == TOP)){
+        }else if ((acc_z_filtered_amplif > acc_max + 7) and (gyr_y_filtered < -7) and (dist_min<=0) and (actual_State == TOP)){
 
           counter_state+=1;
           if(counter_state>=3){
@@ -268,7 +271,7 @@ void loop() {
           }
 
         //From down to rest
-        }else if ((gyr_y_filtered > -7) and (dist_min<=0) and (actual_State == DOWN)){
+        }else if ((acc_z_filtered_amplif > -2) and (gyr_y_filtered > -7) and (dist_min<=0) and (actual_State == DOWN)){
 
           counter_state+=1;
           if(counter_state>=10){
