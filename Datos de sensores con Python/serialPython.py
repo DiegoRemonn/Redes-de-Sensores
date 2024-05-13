@@ -9,7 +9,7 @@ import sys
 
 def main(args):
     # Se inicia una instancia del puerto serie
-    puerto = serial.Serial('COM5', 9600)
+    puerto = serial.Serial('COM10', 9600)
     
     try:
         while True:
