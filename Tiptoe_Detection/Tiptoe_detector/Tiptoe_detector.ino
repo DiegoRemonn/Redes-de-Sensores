@@ -175,7 +175,6 @@ void loop() {
         mean_aux = 0.0;
         start = false;
         actual_State = REST;
-
       }
       
 
@@ -200,8 +199,9 @@ void loop() {
 
         //Saturate data     
         acc_z_filtered = (abs(acc_z_filtered) < 1e-4)? 0.0F : acc_z_filtered;
-        gyr_y_filtered = (abs(gyr_y_filtered) < 0.5)? 0.0F : gyr_y_filtered;
-          
+        gyr_y_filtered = (gyr_y_filtered < 0.5)? 0.0F : gyr_y_filtered;
+        //Serial.print("Gyr(y) filtered: ");
+        //Serial.println(gyr_y_filtered);
         
         ///////////////////////////////////////////////////////////////////////////////////////////MEF
         
@@ -209,7 +209,7 @@ void loop() {
         dist_min -= 1;    
         
         //From rest to up
-        if ((acc_z_filtered > 1e-3) and (dist_min<=0) and (actual_State == REST)){
+        if ((gyr_y_filtered > 2) and (dist_min<=0) and (actual_State == REST)){
 
           counter_state+=1;
           if(counter_state>=5){
@@ -219,11 +219,10 @@ void loop() {
             actual_State = UP ;
             time_up = millis();
             Serial.println("UP");
-
           }
 
         //From up to top
-        }else if ( (abs(acc_z_filtered) < 5e-1) and (dist_min<=0) and (actual_State ==UP)){
+        }else if ((gyr_y_filtered < 1) and (dist_min<=0) and (actual_State == UP)){
 
           counter_state+=1;
           if(counter_state>=3){
@@ -234,11 +233,24 @@ void loop() {
             time_top = millis();
             cycle_time = abs(time_top - time_up);    
             Serial.println("TOP");  
-            
+          }
+
+        //From top to up
+        }else if ((gyr_y_filtered > 2) and (dist_min<=0) and (actual_State == TOP)){
+
+          counter_state+=1;
+          if(counter_state>=3){
+
+            dist_min=5;
+            counter_state=0;
+            actual_State = UP;
+            time_down = millis();
+            top_time = abs(time_down-time_top);
+            Serial.println("UP");
           }
 
         //From top to down
-        }else if ((acc_z_filtered < -5e-4) and (dist_min<=0) and (actual_State ==TOP)){
+        }else if ((acc_z_filtered < -5e0) and (dist_min<=0) and (actual_State == TOP)){
 
           counter_state+=1;
           if(counter_state>=3){
@@ -249,8 +261,8 @@ void loop() {
             time_down = millis();
             top_time = abs(time_down-time_top);
             Serial.println("DOWN");
-            
           }
+
         //From down to rest
         }else if ((abs(acc_z_filtered) < 5e-2) and (dist_min<=0) and (actual_State == DOWN)){
 
@@ -261,13 +273,10 @@ void loop() {
             counter_state=0;
             actual_State = REST;
             Serial.println("REST");
-            
           }  
             
         }else{
-
           actual_State = actual_State;
-
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////GET ANGLE AND RESET VALUES
