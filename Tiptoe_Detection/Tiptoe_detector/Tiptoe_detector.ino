@@ -17,6 +17,7 @@ BBTimer my_t3(BB_TIMER3);
 // Global variables
 bool send_flag = false;
 float acc_z_filtered = 0.0;
+float acc_z_filtered_amplif = 0.0;
 float gyr_y_filtered = 0.0;
 int counter_50Hz = 0;
 float abs_angle_y = 0.0;
@@ -156,6 +157,7 @@ void loop() {
         
         send_flag = false;
         acc_z_filtered = 0.0;
+        acc_z_filtered_amplif = 0.0;
         gyr_y_filtered = 0.0;
         counter_50Hz = 0;
         abs_angle_y = 0.0;
@@ -194,14 +196,16 @@ void loop() {
         z_dps *=-1.0;          
 
         //Filtering data      
-        acc_z_filtered = acc_z_filtered*alpha + z_acc*(1-alpha);
+        acc_z_filtered = acc_z_filtered*alpha + x_acc*(1-alpha);
         gyr_y_filtered = gyr_y_filtered*alpha + z_dps*(1-alpha);
 
         //Saturate data     
         acc_z_filtered = (abs(acc_z_filtered) < 1e-4)? 0.0F : acc_z_filtered;
-        gyr_y_filtered = (gyr_y_filtered < 0.5)? 0.0F : gyr_y_filtered;
-        //Serial.print("Gyr(y) filtered: ");
-        //Serial.println(gyr_y_filtered);
+        gyr_y_filtered = (abs(gyr_y_filtered) < 1)? 0.0F : gyr_y_filtered;
+
+        acc_z_filtered_amplif = acc_z_filtered*100;
+        //Serial.print("Acc(z) filtered: ");
+        //Serial.println(y_dps);
         
         ///////////////////////////////////////////////////////////////////////////////////////////MEF
         
@@ -209,7 +213,7 @@ void loop() {
         dist_min -= 1;    
         
         //From rest to up
-        if ((gyr_y_filtered > 2) and (dist_min<=0) and (actual_State == REST)){
+        if ((acc_z_filtered_amplif < -2) and (abs(y_dps) < 10) and (gyr_y_filtered > 7) and (dist_min<=0) and (actual_State == REST)){
 
           counter_state+=1;
           if(counter_state>=5){
@@ -222,7 +226,7 @@ void loop() {
           }
 
         //From up to top
-        }else if ((gyr_y_filtered < 1) and (dist_min<=0) and (actual_State == UP)){
+        }else if ((gyr_y_filtered < 7) and (dist_min<=0) and (actual_State == UP)){
 
           counter_state+=1;
           if(counter_state>=3){
@@ -236,7 +240,7 @@ void loop() {
           }
 
         //From top to up
-        }else if ((gyr_y_filtered > 2) and (dist_min<=0) and (actual_State == TOP)){
+        }else if ((gyr_y_filtered > 7) and (dist_min<=0) and (actual_State == TOP)){
 
           counter_state+=1;
           if(counter_state>=3){
@@ -250,7 +254,7 @@ void loop() {
           }
 
         //From top to down
-        }else if ((acc_z_filtered < -5e0) and (dist_min<=0) and (actual_State == TOP)){
+        }else if ((gyr_y_filtered < -7) and (dist_min<=0) and (actual_State == TOP)){
 
           counter_state+=1;
           if(counter_state>=3){
@@ -264,7 +268,7 @@ void loop() {
           }
 
         //From down to rest
-        }else if ((abs(acc_z_filtered) < 5e-2) and (dist_min<=0) and (actual_State == DOWN)){
+        }else if ((gyr_y_filtered > -7) and (dist_min<=0) and (actual_State == DOWN)){
 
           counter_state+=1;
           if(counter_state>=10){
