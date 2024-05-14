@@ -291,9 +291,13 @@ void loop() {
         if(actual_State != REST){
 
           //Get the increment in degrees each 20ms
-          angle_y = gyr_y_filtered*0.02; 
-          abs_angle_y = (abs(angle_y) > 2.0F)? (abs_angle_y+angle_y) : abs_angle_y ;
-          
+          angle_y = gyr_y_filtered * 0.027; 
+          abs_angle_y += angle_y;
+          if (abs_angle_y < 0) {
+            abs_angle_y = 0.0;
+          }
+          //Serial.print("Angulo girado: ");
+          //Serial.println(abs_angle_y);
         }else{
 
           angle_y = 0;
