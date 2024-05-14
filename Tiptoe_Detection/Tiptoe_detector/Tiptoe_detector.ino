@@ -186,8 +186,6 @@ void loop() {
 
         send_flag = false;
 
-        if (flag_first<50 and actual_State == REST) {flag_first+=1;}
-
         ///////////////////////////////////////////////////////////////////////////////////////////GET DATA    
         
         IMU.readGyroscope(x_dps, y_dps, z_dps); 
