@@ -1,6 +1,6 @@
 # Escritura_PWM
 
-Este proyecto es una práctica sobre la generación de señales PWM (Modulación por Ancho de Pulso) en el Arduino Nano 33 BLE. Utiliza un timer para realizar lecturas periódicas del ADC y ajustar el ciclo de trabajo del PWM en función del valor leído.
+Generación de señales PWM (Modulación por Ancho de Pulso) en el Arduino Nano 33 BLE. Utiliza un timer para realizar lecturas periódicas del ADC y ajustar el ciclo de trabajo del PWM en función del valor leído.
 
 ## Archivos
 
