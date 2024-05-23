@@ -23,4 +23,4 @@ Este archivo configura y utiliza un timer para realizar lecturas periódicas del
 
 ### `BBTimer.hpp`
 
-La clase `BBTimer` se utiliza para gestionar los timers en el microcontrolador. Proporciona una interfaz sencilla para configurar y controlar los timers, permitiendo la ejecución de funciones de devolución de llamada a intervalos regulares.
+Este archivo define la clase `BBTimer` que permite acceder y manejar los cinco timers de 32 bits del nRF52840. La clase proporciona métodos para configurar, iniciar, detener y actualizar el periodo de los timers. El contenido de este archivo es el mismo que en la carpeta `Lectura_ADC_Timers`.
