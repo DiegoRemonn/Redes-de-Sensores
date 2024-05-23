@@ -1,6 +1,6 @@
 # Lectura_ADC_Timers
 
-Este proyecto es una práctica sobre la lectura del ADC (Convertidor Analógico a Digital) en el Arduino Nano 33 BLE utilizando timers para controlar la periodicidad de las lecturas. Se utiliza una clase `BBTimer` para configurar y manejar los timers del microcontrolador.
+Lectura del ADC (Convertidor Analógico a Digital) en el Arduino Nano 33 BLE utilizando timers para controlar la periodicidad de las lecturas. Se utiliza una clase `BBTimer` para configurar y manejar los timers del microcontrolador.
 
 ## Archivos
 
