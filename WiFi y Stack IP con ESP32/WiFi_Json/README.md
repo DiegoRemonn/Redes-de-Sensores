@@ -1,4 +1,4 @@
-# Carpeta WiFi_Json
+# WiFi_Json
 
 ## Descripción
 Este directorio contiene un proyecto para crear un archivo JSON cada 10 segundos con datos de temperatura aleatorios. El proyecto está diseñado para funcionar en dispositivos compatibles con Arduino que puedan conectarse a una red WiFi.
