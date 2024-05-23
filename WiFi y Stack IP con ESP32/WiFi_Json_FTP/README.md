@@ -1,4 +1,4 @@
-# Carpeta WiFi_Json_FTP
+# WiFi_Json_FTP
 
 ## Descripción
 Este directorio contiene un proyecto para conectar un dispositivo a una red WiFi y enviar archivos JSON a un servidor FTP. El proyecto está diseñado para funcionar en dispositivos compatibles con Arduino y ESP32.
