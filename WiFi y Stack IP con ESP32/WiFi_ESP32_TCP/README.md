@@ -1,7 +1,7 @@
-# Carpeta WiFi_ESP32_TCP
+# WiFi_ESP32_TCP
 
 ## Descripción
-Esta carpeta contiene un proyecto para conectar un dispositivo ESP32 a una red WiFi y establecer una conexión TCP con un servidor. El dispositivo ESP32 enviará datos aleatorios al servidor a través de la conexión TCP.
+Este directorio contiene un proyecto para conectar un dispositivo ESP32 a una red WiFi y establecer una conexión TCP con un servidor. El dispositivo ESP32 enviará datos aleatorios al servidor a través de la conexión TCP.
 
 ## Archivos
 - `WiFi_ESP32_TCP.ino`: Archivo principal del proyecto que contiene el código para conectar el ESP32 a la red WiFi y establecer la conexión TCP con el servidor.
