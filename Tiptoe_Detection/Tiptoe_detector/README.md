@@ -37,3 +37,5 @@ El archivo define la clase `BBTimer` que permite configurar y utilizar los tempo
 2. Crea instancias de la clase `BBTimer` para acceder a los temporizadores de hardware.
 3. Utiliza los métodos de la clase para configurar y controlar los temporizadores según sea necesario.
 
+## Diagrama de funcionamiento
+![img\DIAGRAMA.png](https://github.com/DiegoRemonn/Redes-de-Sensores/blob/main/Tiptoe_Detection/Tiptoe_detector/img/DIAGRAMA%20.png)
